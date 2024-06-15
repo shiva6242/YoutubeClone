@@ -38,7 +38,7 @@ const Wrapper = styled.div`
 `;
 
 function App() {
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
 
   return (

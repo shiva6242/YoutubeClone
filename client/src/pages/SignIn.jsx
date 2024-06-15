@@ -121,7 +121,7 @@ const SignIn = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const res = await axios.post("/auth/signin", { name, password });
+      const res = await axios.post("http://localhost:8800/api/auth/signin", { name, password });
       dispatch(loginSuccess(res.data));
       navigate("/")
     } catch (err) {
@@ -134,7 +134,7 @@ const SignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         axios
-          .post("/auth/google", {
+          .post("http://localhost:8800/api/auth/google", {
             name: result.user.displayName,
             email: result.user.email,
             img: result.user.photoURL,

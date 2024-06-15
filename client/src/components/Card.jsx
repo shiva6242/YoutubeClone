@@ -22,7 +22,7 @@ const Image = styled.img`
   }
   @media (max-width:650px)
   {
-    width:95%;
+    width:100%  
   }
 `;
 
@@ -95,7 +95,7 @@ const Card = ({ type, video }) => {
   const [channel, setChannel] = useState({});
   useEffect(() => {
     const fetchChannel = async () => {
-      const res = await axios.get(`/users/find/${video.userId}`);
+      const res = await axios.get(`http://localhost:8800/api/users/find/${video.userId}`);
       console.log(res)
 
       setChannel(res.data);

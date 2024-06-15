@@ -312,7 +312,7 @@ const Video = () => {
       try {
         await axios.put(`http://localhost:8800/api/videos/view/${path}`)
         const videoRes = await axios.get(`http://localhost:8800/api/videos/find/${path}`);
-        const channelRes = await axios.get(`/users/find/${videoRes.data.userId}`);
+        const channelRes = await axios.get(`http://localhost:8800/api/users/find/${videoRes.data.userId}`);
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data));
         setCurrentQuality(videoRes.data.videoUrl[0].url);
@@ -325,17 +325,23 @@ const Video = () => {
 
   const handleLike = async () => {
     try {
-      await axios.put(`/users/like/${currentVideo._id}`);
-      dispatch(like(currentUser._id));
-    } catch (err) {
+      if(currentUser){
+        await axios.put(`http://localhost:8800/api/users/like/${currentVideo._id}`,{currentUser});
+        dispatch(like(currentUser._id));
+      }
+     
+    } catch (err) { 
       console.error("Error liking the video", err);
     }
   };
 
   const handleDislike = async () => {
     try {
-      await axios.put(`/users/dislike/${currentVideo._id}`);
-      dispatch(dislike(currentUser._id));
+    if(currentUser)
+      {
+        await axios.put(`http://localhost:8800/api/users/dislike/${currentVideo._id}`,{currentUser});
+        dispatch(dislike(currentUser._id));
+      }
     } catch (err) {
       console.error("Error disliking the video", err);
     }
@@ -343,12 +349,15 @@ const Video = () => {
 
   const handleSub = async () => {
     try {
-      if (currentUser.subscribedUsers.includes(channel._id)) {
-        await axios.put(`/users/unsub/${channel._id}`);
-      } else {
-        await axios.put(`/users/sub/${channel._id}`);
+     if(currentUser)
+      {
+        if (currentUser.subscribedUsers.includes(channel._id)) {
+          await axios.put(`http://localhost:8800/api/users/unsub/${channel._id}`,{currentUser});
+        } else {
+          await axios.put(`http://localhost:8800/api/users/sub/${channel._id}`,{currentUser});
+        }
+        dispatch(subscription(channel._id));
       }
-      dispatch(subscription(channel._id));
     } catch (err) {
       console.error("Error subscribing/unsubscribing to the channel", err);
     }
@@ -488,7 +497,7 @@ const Video = () => {
       const tapLength = currentTime - doubleTapRef.current.lastTap;
   
       if (tapLength < 300 && tapLength > 0) {
-        const res = await axios.get(`/videos/random`);
+        const res = await axios.get(`http://localhost:8800/api/videos/random`);
         const randomInt = Math.floor(Math.random() * res.data.length);
         navigate(`/video/${res.data[randomInt]._id}`);
         setTapCount(0);

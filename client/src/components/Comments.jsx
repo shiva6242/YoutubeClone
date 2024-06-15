@@ -53,7 +53,7 @@ const Comments = ({videoId}) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await axios.get(`/comments/${videoId}`);
+        const res = await axios.get(`http://localhost:8800/api/comments/${videoId}`);
         setComments(res.data);
       } catch (err) {}
     };
@@ -64,7 +64,7 @@ const Comments = ({videoId}) => {
   const handleComment=async()=>{
     console.log(newComment,videoId,currentUser)
     try {
-      await axios.post('/comments',{videoId,newComment,currentUser})
+      await axios.post('http://localhost:8800/api/comments',{videoId,newComment,currentUser})
     } catch (error) {
       console.log(error)
     }
